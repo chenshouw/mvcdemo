@@ -64,23 +64,26 @@
         
       5.修改jsp页面，显示校验结果
       
-          
+          <!--  校验失败后，由spring mvc 返回错误信息到jsp页面，
+		       在进行信息显示一般有两种方法:
+		         1.把所有的错误信息显示到一起
+		         2.把错误信息显示到对应的表单项中--
+		 -->
+		<c:if test="${errors !=null }">
+		     表单 信息填写有误，请检查：<br>
+			<c:forEach items="${errors }" var="error">
+				${error.defaultMessage } <br>
+			</c:forEach>
+		</c:if>
+      
+        <tr>
+				<td>用户帐号：</td>
+				<td><input name="userName" type="text" /></td>
+				<td>
+				<!-- 使用错误对象的属性进行判断，根据判断结果显示错误信息 -->
+				<c:if test="${errors[0].field  == 'userName' }">
+				    ${errors[0].defaultMessage}
+				</c:if></td>
+		</tr>
       
       
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
