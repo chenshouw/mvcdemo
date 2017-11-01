@@ -7,6 +7,10 @@
 <title>Insert title here</title>
 </head>
 <body>
+
+    
+    <a href="user/toreg.do">注册用户</a><br>
+
 	这个站点的首页页面
 	<br>
 	<a href="hello.do">sayHello</a>

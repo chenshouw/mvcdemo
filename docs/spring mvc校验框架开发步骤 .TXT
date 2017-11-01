@@ -1,0 +1,86 @@
+
+ 开发步骤：
+      1.导入第三方校验包：--列出包名
+        hibernate-validator-4.3.0.Final.jar
+		jboss-logging-3.1.0.CR2.jar
+		validation-api-1.0.0.GA.jar
+      2.修改mvc配置文件，增加校验框架
+          1).配置校验器
+             <!-- 校验器 -->
+			<bean id="validator"
+				class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+				<!-- hibernate校验器-->
+				<property name="providerClass" value="org.hibernate.validator.HibernateValidator" />
+				<!-- 指定校验使用的资源文件，在文件中配置校验错误信息，如果不指定则默认使用classpath下的ValidationMessages.properties -->
+			<!-- 	<property name="validationMessageSource" ref="messageSource" /> -->
+			</bean>
+			<!-- 校验错误信息配置文件 -->
+				<bean id="messageSource"
+					class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+					<!-- 资源文件名-->
+					<property name="basenames">   
+			       	 <list>    
+			            <value>classpath:config/CustomValidationMessages</value> 
+			       	 </list>   
+			    	</property>
+					<!-- 资源文件编码格式 -->
+					<property name="fileEncodings" value="utf-8" />
+					<!-- 对资源文件内容缓存时间，单位秒 -->
+					<property name="cacheSeconds" value="120" />
+				</bean>
+          2).启用校验器
+            <mvc:annotation-driven conversion-service="conversionService"  validator="validator"></mvc:annotation-driven>
+	
+       
+      3.修改实体类，进行校验规则配置
+            	public class UserInfo {
+						private int uid;
+						@NotBlank(message="用户帐号不能为空")
+						private String userName;
+						private String[] hobby;// 爱好
+						private Date birthDay;// 出生日期，spring默认提供了时间转换器：yyyy/MM/dd ,yyyy/MM/dd
+												// HH:mm:ss ,Nov 01 04:12:12 CST 2017
+						private List<Order> orderList;// 一个用户有多个订单
+						private Order order;// 一个用户只有一个订单
+						  //.....
+				｝
+      
+      4.修改控制器类，实现校验功能
+           //设计一个方法，用于用户提交注册信息时，完成注册信息入口功能
+			@RequestMapping("/register")
+			public ModelAndView doReg( @Validated  UserInfo user,BindingResult br){
+				//注册成功，返回success页面
+				ModelAndView view = new ModelAndView("success");
+				
+				if(br.hasErrors()){
+					view.addObject("errors", br.getAllErrors());//取出校验错误结果，使用view model发送到jsp页面进行显示
+					view.setViewName("reguser");//发生错误后，需要跳转到哪个页面;本例，返回原来的页面
+				}else{
+					//view.addObject("userinfo", user);
+					view.getModel().put("userinfo", user);
+				}
+				return view;
+			}
+        
+      5.修改jsp页面，显示校验结果
+      
+          
+      
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
