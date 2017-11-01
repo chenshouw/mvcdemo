@@ -18,5 +18,9 @@
 	</c:forEach>
 	<br>
 	${user.birthDay }
+	<br>
+	<c:forEach items="${user.orderList }"  var="od">
+	   <c:out value="${od.oid }" />&nbsp;&nbsp;<c:out value="${od.price}" />
+	</c:forEach>
 </body>
 </html>
