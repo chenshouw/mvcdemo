@@ -7,6 +7,23 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>用户注册</title>
 <base  href="<%=request.getContextPath()+"/"%>"/>
+
+<script type="text/javascript" src="js/jquery-1.11.1.js"></script>
+<script type="text/javascript">
+  //ajax操作函数
+  function checkUserName(){
+	  //$("a[target='_blank']")	
+	  //1.作业：jquery的选择器都有哪些?写出你常用的5个选择器.
+	  var uname = $("input[name='userName']").val();  
+	 alert(uname);
+	 $.post("user/checkuser.do",{userName:uname},doResult);
+  }
+  //回调函数
+  function doResult(data){
+	  alert(data);
+  }
+</script>
+
 </head>
 <body>
 
@@ -22,7 +39,7 @@
 	</c:forEach>
 </c:if>
 
-	<form name="regForm" action="user/register.do"   method="post">
+	<form name="regForm"   enctype="multipart/form-data"  action="user/register.do"   method="post">
 		<table>
 			<tr>
 				<td colspan="3">用户注册</td>
@@ -34,7 +51,7 @@
 			</tr>
 			<tr>
 				<td>用户帐号：</td>
-				<td><input name="userName" type="text" /></td>
+				<td><input name="userName"  onblur="checkUserName();"   type="text" /></td>
 				<td>
 				<!-- 使用错误对象的属性进行判断，根据判断结果显示错误信息 -->
 				<c:if test="${errors[0].field  == 'userName' }">
@@ -47,6 +64,12 @@
 				<td></td>
 			</tr>
 
+            <tr>
+				<td>用户头像：</td>
+				<td><input name="file1" type="file" /></td>
+				<td></td>
+			</tr>
+			
 			<tr>
 				<td>爱好：</td>
 				<td><input name="hobby" type="checkbox" value="music" />音乐 <input

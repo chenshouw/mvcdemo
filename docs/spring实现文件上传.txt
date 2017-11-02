@@ -1,0 +1,59 @@
+
+开发步骤：
+1.修改jsp页面，增加文件标签，修改enctype="multipart/form-data" 
+   <input name="headURL" type="file" />
+   
+2.配置spring mvc框架，支持文件上传
+   <!-- 文件上传 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 设置上传文件的最大尺寸为5MB -->
+		<property name="maxUploadSize">
+			<value>5242880</value>
+		</property>
+	</bean>
+	
+3.修改Controller类，使用MultipartFile接收上传的文件
+	     //设计一个方法，用于用户提交注册信息时，完成注册信息入口功能
+		@RequestMapping("/register")
+		public ModelAndView doReg( HttpServletRequest request, @Validated  UserInfo user,BindingResult br ,MultipartFile file1) throws IllegalStateException, IOException{
+			//注册成功，返回success页面
+			ModelAndView view = new ModelAndView("success");
+			
+			if(br.hasErrors()){
+				view.addObject("errors", br.getAllErrors());//取出校验错误结果，使用view model发送到jsp页面进行显示
+				view.setViewName("reguser");//发生错误后，需要跳转到哪个页面;本例，返回原来的页面
+			}else{
+				//view.addObject("userinfo", user);
+				view.getModel().put("userinfo", user);
+				//处理文件上传
+				//原始名称
+					String originalFilename = file1.getOriginalFilename();
+					if(file1 !=null && originalFilename !=null && originalFilename.length()>0) {
+						//存储图片的物理路径
+					   String basePath= 	request.getServletContext().getRealPath("/uploads");
+						//新的图片名称-- 使用UUID算法解决文件名重复问题
+						String newFileName = UUID.randomUUID() + originalFilename.substring(originalFilename.lastIndexOf("."));
+						//新图片
+						File newFile = new File(basePath+File.separatorChar+ newFileName);
+						//将内存的数据写入磁盘
+						file1.transferTo(newFile);
+						//将新图片名称写到users中
+						user.setHeadURL("uploads/"+ newFileName);
+					}
+			}
+			return view;
+		}
+  //注意：上传文件表单域名称不要与服务端保存文件的属性名称一致，否则可能造成名称的冲突
+  // 本例：UserInfo的headURL属性不要与表单的文件name的值file1相同
+  
+  4.  调用service业务代码，保存文件在服务器的路径到数据库中  -- 本例略
+  5.在进行查询页面，显示上传后的图片 - 如何拼接访问图片的URL地址？
+	<img src="<%=request.getContextPath()+"/" %>${userinfo.headURL }" width="100px">
+   
+ 
+   
+     
+
+
+

@@ -16,6 +16,15 @@ public class UserInfo {
 							// HH:mm:ss ,Nov 01 04:12:12 CST 2017
 	private List<Order> orderList;// 一个用户有多个订单
 	private Order order;// 一个用户只有一个订单
+	private String headURL ;//用户头像
+	
+	public String getHeadURL() {
+		return headURL;
+	}
+
+	public void setHeadURL(String headURL) {
+		this.headURL = headURL;
+	}
 
 	public Order getOrder() {
 		return order;

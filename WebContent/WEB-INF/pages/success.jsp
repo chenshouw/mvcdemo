@@ -21,5 +21,8 @@
 	<c:forEach items="${userinfo.orderList }"  var="od">
 	   <c:out value="${od.oid }" />&nbsp;&nbsp;<c:out value="${od.price}" />
 	</c:forEach>
+	
+	<img src="<%=request.getContextPath()+"/" %>${userinfo.headURL }" width="100px">
+
 </body>
 </html>
