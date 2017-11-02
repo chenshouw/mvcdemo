@@ -16,11 +16,12 @@
 	  //1.作业：jquery的选择器都有哪些?写出你常用的5个选择器.
 	  var uname = $("input[name='userName']").val();  
 	 alert(uname);
-	 $.post("user/checkuser.do",{userName:uname},doResult);
+	 //post方法请求的4个参数：1-是请求的地址，2-请求的参数，3-回调函数，4-返回的数据类型
+	 $.post("user/checkuser.do",{userName:uname},doResult,"json");
   }
   //回调函数
   function doResult(data){
-	  alert(data);
+	  alert(data.success);//使用json 或对象形式解析数据
   }
 </script>
 

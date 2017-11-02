@@ -10,6 +10,22 @@
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
   
+  <!-- 配置spring提供的编码过滤器，过滤器的配置需要注意配置的顺序，
+  会按照配置的顺序配置过滤器链，会按照过滤器链的先后顺序进行工作
+   -->
+  <filter>
+  <filter-name>encodingFilter</filter-name>
+  <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+	  <init-param>
+	     <param-name>encoding</param-name>
+	     <param-value>UTF-8</param-value>
+	  </init-param>
+  </filter>
+  <filter-mapping>
+       <filter-name>encodingFilter</filter-name>
+       <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  
   
   <!-- 配置spring中央控制器 -->
 	<servlet>
@@ -27,6 +43,12 @@
 	  <servlet-name>springmvc</servlet-name>
 	  <!-- 所有请求以.do结尾的都是spring请求，.do后面可以跟参数列表 -->
 	  <url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+	  <servlet-name>springmvc</servlet-name>
+	  <!-- 所有请求都是spring请求 -->
+	  <url-pattern>/</url-pattern>
 	</servlet-mapping>
   
   

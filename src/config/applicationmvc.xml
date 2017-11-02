@@ -19,6 +19,12 @@
 	实际开发时使用mvc:annotation-driven
 	 -->
 	<mvc:annotation-driven conversion-service="conversionService"  validator="validator"></mvc:annotation-driven>
+	<!-- 
+	           配置和restful后，所有的请求都被拦截到spring的中央控制器中
+	           对于不希望拦截的资源可以使用resources进行配置
+	    -->
+	<mvc:resources location="/js/" mapping="/js/**"></mvc:resources>
+	<mvc:resources location="/uploads/" mapping="/uploads/**"></mvc:resources>
 	
     <!-- 配置spring视图解析器(渲染器)，用于返回各种视图文件给用户端：jsp，pdf,xml,excel,word,或其它模版文件... -->  
      <!-- the ResourceBundleViewResolver -->
