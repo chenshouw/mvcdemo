@@ -2,13 +2,14 @@ package com.neuedu.mvcdemo.view;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -20,27 +21,31 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.neuedu.mvcdemo.biz.UserinfoService;
 import com.neuedu.mvcdemo.model.UserInfo;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
 	private Logger logger = Logger.getRootLogger();
+	@Autowired
+	private UserinfoService userinfoService;
 
-	//使用restful编程可以进行多个参数的传递
+	// 使用restful编程可以进行多个参数的传递
 	@RequestMapping(value = "/find/{op}/{type}", method = RequestMethod.GET, produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String findAllUser(@PathVariable("op") String op, @PathVariable("type") Integer type) {
-		logger.info("《》《》《》《》《》  "+op+" =====   "+type);
 		Gson gson = new Gson();//
 		if ("all".equals(op)) {
-			List<UserInfo> list = new ArrayList<>();
-			list.add(new UserInfo(1, "张三"));
-			list.add(new UserInfo(2, "Tom"));
-			// Gson的使用步骤：// 1.实例化一个gson对象 ；
-			// 2.调用gson把java对象转换成json字符串 或 把json字符串转换成java对象
-			// 3.支持的数据类型：基本数据类型，字符串类型，数组，java类，集合
-			String jsonString = gson.toJson(list);
+			
+			Type t = new TypeToken<List<UserInfo>>() {  }.getType();  
+	        //List<UserInfo> beanOnes = gson.fromJson(jsonString, t); 
+	        
+			List<UserInfo> list = userinfoService.findAll();
+			
+			
+			String jsonString = gson.toJson(list,t);
 			return jsonString;
 		} else {
 			UserInfo userInfo = new UserInfo(3, "Jack");
@@ -91,6 +96,11 @@ public class UserController {
 				file1.transferTo(newFile);
 				// 将新图片名称写到users中
 				user.setHeadURL("uploads/" + newFileName);
+
+				int count = userinfoService.addUserInfo(user);
+				if (count > 0) {
+					view.setViewName("redirect:/user/find/all/1");// 重定向到查询列表
+				}
 			}
 		}
 		return view;

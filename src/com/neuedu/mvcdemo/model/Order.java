@@ -1,6 +1,12 @@
 package com.neuedu.mvcdemo.model;
 
-public class Order {
+import java.io.Serializable;
+
+public class Order implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 111737271972418065L;
 	private int oid;
 	private String name;
 	private int goodsId;

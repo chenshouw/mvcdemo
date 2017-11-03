@@ -9,69 +9,70 @@
 	http://www.springframework.org/schema/context/spring-context-4.1.xsd
 	http://www.springframework.org/schema/mvc
 	http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd">
-    
-    <!-- spring mvc的控制器类也是使用注解方式整合代码，使用组件扫描配置进行Co;ntrallor package包的配置 -->
-	<context:component-scan base-package="com.neuedu"></context:component-scan>
-      
-     <!-- 使用 mvc:annotation-driven代替上边注解映射器和注解适配器配置
-	mvc:annotation-driven默认加载很多的参数绑定方法，
-	比如json转换解析器就默认加载了，如果使用mvc:annotation-driven不用配置上边的RequestMappingHandlerMapping和RequestMappingHandlerAdapter
-	实际开发时使用mvc:annotation-driven
-	 -->
-	<mvc:annotation-driven conversion-service="conversionService"  validator="validator"></mvc:annotation-driven>
-	<!-- 
-	           配置和restful后，所有的请求都被拦截到spring的中央控制器中
-	           对于不希望拦截的资源可以使用resources进行配置
-	    -->
+
+	<!-- spring mvc的控制器类也是使用注解方式整合代码，使用组件扫描配置进行Co;ntrallor package包的配置 -->
+	<context:component-scan base-package="com.neuedu.mvcdemo.view"></context:component-scan>
+	<mvc:default-servlet-handler />
+	<!-- 使用 mvc:annotation-driven代替上边注解映射器和注解适配器配置 mvc:annotation-driven默认加载很多的参数绑定方法， 
+		比如json转换解析器就默认加载了，如果使用mvc:annotation-driven不用配置上边的RequestMappingHandlerMapping和RequestMappingHandlerAdapter 
+		实际开发时使用mvc:annotation-driven -->
+	<mvc:annotation-driven conversion-service="conversionService"
+		validator="validator"></mvc:annotation-driven>
+	<!-- 配置了restful后，所有的请求都被拦截到spring的中央控制器中 对于不希望拦截的资源可以使用resources进行配置 -->
 	<mvc:resources location="/js/" mapping="/js/**"></mvc:resources>
 	<mvc:resources location="/uploads/" mapping="/uploads/**"></mvc:resources>
 	
-    <!-- 配置spring视图解析器(渲染器)，用于返回各种视图文件给用户端：jsp，pdf,xml,excel,word,或其它模版文件... -->  
-     <!-- the ResourceBundleViewResolver -->
-	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-	    <!-- basename属性用于配置需要由spring视图解析器配置的页面或模版 -->
-	   <!-- 配置jsp路径的前缀 -->
-		<property name="prefix" value="/WEB-INF/pages/"/>
+     <!-- 如果使用了RESTful形式的拦截，那么对于静态资源的处理上，就需要加上此句，静态资源（没有映射的）就会 -->
+    <mvc:default-servlet-handler />
+
+	<!-- 配置spring视图解析器(渲染器)，用于返回各种视图文件给用户端：jsp，pdf,xml,excel,word,或其它模版文件... -->
+	<!-- the ResourceBundleViewResolver -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- basename属性用于配置需要由spring视图解析器配置的页面或模版 -->
+		<!-- 配置jsp路径的前缀 -->
+		<property name="prefix" value="/WEB-INF/pages/" />
 		<!-- 配置jsp路径的后缀 -->
-		<property name="suffix" value=".jsp"/>
+		<property name="suffix" value=".jsp" />
 	</bean>
-	
-	
+
+
 	<!-- 自定义参数绑定 -->
-	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+	<bean id="conversionService"
+		class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
 		<!-- 转换器 -->
 		<property name="converters">
 			<list>
 				<!-- 日期类型转换 -->
-				<bean class="com.neuedu.mvcdemo.view.converter.CustomDateConverter"/>
+				<bean class="com.neuedu.mvcdemo.view.converter.CustomDateConverter" />
 			</list>
 		</property>
 	</bean>
-	
-	
+
+
 	<!-- 校验器 -->
 	<bean id="validator"
 		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
-		<!-- hibernate校验器-->
+		<!-- hibernate校验器 -->
 		<property name="providerClass" value="org.hibernate.validator.HibernateValidator" />
 		<!-- 指定校验使用的资源文件，在文件中配置校验错误信息，如果不指定则默认使用classpath下的ValidationMessages.properties -->
-	<!-- 	<property name="validationMessageSource" ref="messageSource" /> -->
+		<!-- <property name="validationMessageSource" ref="messageSource" /> -->
 	</bean>
-<!-- 校验错误信息配置文件 -->
+	<!-- 校验错误信息配置文件 -->
 	<bean id="messageSource"
 		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-		<!-- 资源文件名-->
-		<property name="basenames">   
-       	 <list>    
-            <value>classpath:config/CustomValidationMessages</value> 
-       	 </list>   
-    	</property>
+		<!-- 资源文件名 -->
+		<property name="basenames">
+			<list>
+				<value>classpath:config/CustomValidationMessages</value>
+			</list>
+		</property>
 		<!-- 资源文件编码格式 -->
 		<property name="fileEncodings" value="utf-8" />
 		<!-- 对资源文件内容缓存时间，单位秒 -->
 		<property name="cacheSeconds" value="120" />
 	</bean>
-	
+
 	<!-- 文件上传 -->
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
@@ -80,5 +81,5 @@
 			<value>5242880</value>
 		</property>
 	</bean>
-	
+
 </beans>

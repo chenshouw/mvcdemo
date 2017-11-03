@@ -1,55 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
-  <display-name>mvcdemo</display-name>
-  <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-    <welcome-file>index.htm</welcome-file>
-    <welcome-file>index.jsp</welcome-file>
-    <welcome-file>default.html</welcome-file>
-    <welcome-file>default.htm</welcome-file>
-    <welcome-file>default.jsp</welcome-file>
-  </welcome-file-list>
-  
-  <!-- 配置spring提供的编码过滤器，过滤器的配置需要注意配置的顺序，
-  会按照配置的顺序配置过滤器链，会按照过滤器链的先后顺序进行工作
-   -->
-  <filter>
-  <filter-name>encodingFilter</filter-name>
-  <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
-	  <init-param>
-	     <param-name>encoding</param-name>
-	     <param-value>UTF-8</param-value>
-	  </init-param>
-  </filter>
-  <filter-mapping>
-       <filter-name>encodingFilter</filter-name>
-       <url-pattern>/*</url-pattern>
-  </filter-mapping>
-  
-  
-  <!-- 配置spring中央控制器 -->
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+	<display-name>mvcdemo</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+
+	<context-param>
+		<!-- 注意参数名称是一个固定值，spring监听器会默认读取该参数 -->
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath*:config/applicationContext.xml</param-value>
+	</context-param>
+
+	<!-- 配置spring上下文环境加载监听器 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<!-- 配置spring提供的编码过滤器，过滤器的配置需要注意配置的顺序， 会按照配置的顺序配置过滤器链，会按照过滤器链的先后顺序进行工作 -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+
+	<!-- 配置spring中央控制器 -->
 	<servlet>
-	   <servlet-name>springmvc</servlet-name>
-	   <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-	   <!-- DispatcherServlet是一个中央控制器类，也可以读取配置文件，加载spring运行环境 -->
-	   <init-param>
-	      <param-name>contextConfigLocation</param-name>
-	      <param-value>classpath*:config/applicationmvc.xml</param-value>
-	    </init-param>
-	    <!-- 配置servlet的加载级别，1为最高级别,级别高的先加载 -->
-	    <load-on-startup>1</load-on-startup>
+		<servlet-name>springmvc</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!-- DispatcherServlet是一个中央控制器类，也可以读取配置文件，加载spring运行环境 -->
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath*:config/applicationmvc.xml</param-value>
+		</init-param>
+		<!-- 配置servlet的加载级别，1为最高级别,级别高的先加载 -->
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>
-	  <servlet-name>springmvc</servlet-name>
-	  <!-- 所有请求以.do结尾的都是spring请求，.do后面可以跟参数列表 -->
-	  <url-pattern>*.do</url-pattern>
+		<servlet-name>springmvc</servlet-name>
+		<!-- 所有请求以.do结尾的都是spring请求，.do后面可以跟参数列表 -->
+		<url-pattern>*.do</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet-mapping>
-	  <servlet-name>springmvc</servlet-name>
-	  <!-- 所有请求都是spring请求 -->
-	  <url-pattern>/</url-pattern>
+		<servlet-name>springmvc</servlet-name>
+		<!-- 所有请求都是spring请求 -->
+		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-  
-  
+
+
 </web-app>

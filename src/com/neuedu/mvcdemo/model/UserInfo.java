@@ -1,23 +1,41 @@
 package com.neuedu.mvcdemo.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-public class UserInfo {
+public class UserInfo implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8461618202676089632L;
 
 	private int uid;
-	
-	@NotBlank(message="用户帐号不能为空")
+
+	@NotBlank(message = "用户帐号不能为空")
 	private String userName;
 	private String[] hobby;// 爱好
 	private Date birthDay;// 出生日期，spring默认提供了时间转换器：yyyy/MM/dd ,yyyy/MM/dd
 							// HH:mm:ss ,Nov 01 04:12:12 CST 2017
 	private List<Order> orderList;// 一个用户有多个订单
 	private Order order;// 一个用户只有一个订单
-	private String headURL ;//用户头像
-	
+	private String headURL;// 用户头像
+
+	public void setHobbies(String hobbies) {
+		if (hobbies != null) {
+			hobby = hobbies.split(",");
+		}
+	}
+	public String getHobbies() {
+		if (hobby != null) {
+			return String.join(",", hobby);
+		}
+		return null;
+	}
+
 	public String getHeadURL() {
 		return headURL;
 	}
@@ -68,6 +86,14 @@ public class UserInfo {
 		this.userName = userName;
 	}
 
+	public UserInfo(String userName, String[] hobby, Date birthDay, String headURL) {
+		super();
+		this.userName = userName;
+		this.hobby = hobby;
+		this.birthDay = birthDay;
+		this.headURL = headURL;
+	}
+
 	public int getUid() {
 		return uid;
 	}
@@ -76,7 +102,6 @@ public class UserInfo {
 		this.uid = uid;
 	}
 
-	
 	public String getUserName() {
 		return userName;
 	}

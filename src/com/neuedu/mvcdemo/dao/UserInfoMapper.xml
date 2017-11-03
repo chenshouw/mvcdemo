@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.mvcdemo.dao.UserInfoMapper">
+
+	<resultMap type="UserInfo" id="UserInfoMap">
+		<id column="user_id" property="uid" />
+		<result column="user_name" property="userName" />
+		<result column="birthday" property="birthDay" />
+		<result column="headurl" property="headURL" />
+		  <!-- 调用setHobbies方法把字符串转换成数组 -->
+		<result column="hobby" property="hobbies" />
+	</resultMap>
+	<insert id="addUserInfo" parameterType="UserInfo">
+	     <!-- 使用数据库序列实现主键的自增 -->
+		<selectKey keyProperty="uid" resultType="int" order="BEFORE">
+			select seq_userinfo.NEXTVAL from dual
+		</selectKey>
+		<!-- #{hobbies} 调用getHobbies方法，把数组转换成字符串 -->
+		insert into userinfo(user_id,user_name,birthday,headurl,hobby)
+		values(${uid},#{userName},#{birthDay},#{headURL} ,#{hobbies})
+	</insert>
+
+	<select id="findAll" resultMap="UserInfoMap">
+		select user_id,user_name,birthday,headurl,hobby from userinfo
+	</select>
+
+</mapper>
