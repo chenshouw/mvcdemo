@@ -12,8 +12,10 @@ public class UserInfo implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 8461618202676089632L;
-
-	private int uid;
+   
+	//使用框架编程后，由于有很多编码由框架完成，
+	//建议： 在定义实体类时所有的原始数据类型都使用包装类进行定义,程序的兼容性更好
+	private Integer uid;
 
 	@NotBlank(message = "用户帐号不能为空")
 	private String userName;
@@ -80,7 +82,7 @@ public class UserInfo implements Serializable{
 		super();
 	}
 
-	public UserInfo(int uid, String userName) {
+	public UserInfo(Integer uid, String userName) {
 		super();
 		this.uid = uid;
 		this.userName = userName;
@@ -94,11 +96,11 @@ public class UserInfo implements Serializable{
 		this.headURL = headURL;
 	}
 
-	public int getUid() {
+	public Integer getUid() {
 		return uid;
 	}
 
-	public void setUid(int uid) {
+	public void setUid(Integer uid) {
 		this.uid = uid;
 	}
 

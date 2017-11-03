@@ -5,6 +5,11 @@
 	   <package name="com.neuedu.mvcdemo.model"/>
 	 </typeAliases>
 	<mappers>
+	     <!-- 使用pacakge进行配置，mybatis会查找指定包下面的接口，
+	     并根据接口的名称查找对应的mapper映射文件 
+	     注意：此时需要把mapper映射文件的名称与接口的名称一致。
+	           如果名称不一致，需要使用 <mapper resource=""/>标签进行配置
+	     -->
 	    <package name="com.neuedu.mvcdemo.dao"/>
 	</mappers>
 
